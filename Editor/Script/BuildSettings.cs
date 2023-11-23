@@ -54,21 +54,21 @@ namespace UnityBuild
             EditorUserBuildSettings.standaloneBuildSubtarget = StandaloneBuildSubtarget;
             EditorUserBuildSettings.SwitchActiveBuildTarget(BuildTargetGroup, BuildTarget);
 
-            if (BuildTarget == BuildTarget.Android)
-            {
-                EditorUserBuildSettings.buildAppBundle = BuildAppBundle;
-                PlayerSettings.Android.useAPKExpansionFiles = UseAPKExpansionFiles;
-                PlayerSettings.Android.bundleVersionCode = args.BundleCode;
+#if UNITY_ANDROID
 
-                // if (!config.AndroidKeyStoreName.IsNullOrEmpty())
-                // {
-                //     PlayerSettings.Android.useCustomKeystore = true;
-                //     PlayerSettings.Android.keystoreName = config.AndroidKeyStoreName;
-                //     PlayerSettings.Android.keystorePass = config.AndroidKeyStorePass;
-                //     PlayerSettings.Android.keyaliasName = config.AndroidKeyAliasName;
-                //     PlayerSettings.Android.keyaliasPass = config.AndroidKeyAliasPass;
-                // }
-            }
+            EditorUserBuildSettings.buildAppBundle = BuildAppBundle;
+            PlayerSettings.Android.useAPKExpansionFiles = UseAPKExpansionFiles;
+            PlayerSettings.Android.bundleVersionCode = args.BundleCode;
+
+            // if (!config.AndroidKeyStoreName.IsNullOrEmpty())
+            // {
+            //     PlayerSettings.Android.useCustomKeystore = true;
+            //     PlayerSettings.Android.keystoreName = config.AndroidKeyStoreName;
+            //     PlayerSettings.Android.keystorePass = config.AndroidKeyStorePass;
+            //     PlayerSettings.Android.keyaliasName = config.AndroidKeyAliasName;
+            //     PlayerSettings.Android.keyaliasPass = config.AndroidKeyAliasPass;
+            // }
+#endif
 
             var options = new BuildPlayerOptions()
             {
