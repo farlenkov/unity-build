@@ -29,13 +29,6 @@ namespace UnityBuild
 
         [field: SerializeField] public GraphicsDeviceType[] GraphicsDeviceTypes { get; private set; }
 
-        [ContextMenu("Build")]
-        public void Build()
-        {
-            var args = BuildArgs.Load();
-            Build(args);
-        }
-
         public virtual void Build(BuildArgs args)
         {
             // LOAD CONFIGS

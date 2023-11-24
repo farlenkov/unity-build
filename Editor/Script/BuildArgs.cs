@@ -8,7 +8,7 @@ namespace UnityBuild
     [CreateAssetMenu(menuName = "Build/Args", fileName = "DefaultArgs")]
     public class BuildArgs : ScriptableObject
     {
-        public string BuildPath = "../../Builds"; // -buildpath
+        public string BuildPath = "../../../Builds"; // -buildpath
         public string BuildType = "Default"; // -buildtype
         public string BundleName = "com.company.product"; // -bundle
         public int BundleCode = 1; // -bundlecode
@@ -16,10 +16,10 @@ namespace UnityBuild
 
         // LOAD
 
-        public static BuildArgs Load()
+        public static BuildArgs Read()
         {
             var args = Environment.GetCommandLineArgs();
-            var result = Resources.LoadAll<BuildArgs>("")[0];
+            var result = Resources.LoadAll<BuildArgs>(string.Empty)[0];
 
             for (var i = 0; i < args.Length; i++)
             {
@@ -42,6 +42,12 @@ namespace UnityBuild
                 return value;
             else
                 return defaultValue;
+        }
+
+        [ContextMenu("Build")]
+        public void Build()
+        {
+            BuildMaker.Build(this);
         }
     }
 }
