@@ -1,7 +1,7 @@
 {
   "name": "com.farlenkov.unity-build",
   "displayName": "UNITY / BUILD",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "unity": "2022.3",
   "description": "Unity Build",
   "keywords": [
@@ -11,5 +11,8 @@
   "author": {
     "name": "Mike Farlenkov",
     "url": "https://farlenkov.com"
+  },
+  "dependencies": {
+    "com.unity.editorcoroutines": ""
   }
 }
