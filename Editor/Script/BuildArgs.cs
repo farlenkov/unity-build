@@ -1,6 +1,9 @@
 #if UNITY_EDITOR
 
 using System;
+using System.Collections;
+using System.IO;
+using Unity.EditorCoroutines.Editor;
 using UnityEngine;
 
 namespace UnityBuild
@@ -8,11 +11,14 @@ namespace UnityBuild
     [CreateAssetMenu(menuName = "Build/Args", fileName = "DefaultArgs")]
     public class BuildArgs : ScriptableObject
     {
-        public string BuildPath = "../../../Builds"; // -buildpath
+        public string[] BuildName;
         public string BuildType = "Default"; // -buildtype
         public string BundleName = "com.company.product"; // -bundle
-        public int BundleCode = 1; // -bundlecode
         public string Product = "MyGame"; // -product
+
+        [NonSerialized] public int VersionCode; // -code
+        [NonSerialized] public string Version; // -ver
+        [NonSerialized] public string BuildPath; // -buildpath
 
         // LOAD
 
@@ -28,7 +34,8 @@ namespace UnityBuild
                     case "-buildpath": result.BuildPath = args[i + 1]; break;
                     case "-buildtype": result.BuildType = args[i + 1]; break;
                     case "-bundle": result.BundleName = args[i + 1]; break;
-                    case "-bundlecode": result.BundleCode = Parse(args[i + 1]); break;
+                    case "-ver": result.Version = args[i + 1]; break;
+                    case "-code": result.VersionCode = Parse(args[i + 1]); break;
                     case "-product": result.Product = args[i + 1]; break;
                 }
             }
@@ -45,8 +52,19 @@ namespace UnityBuild
         }
 
         [ContextMenu("Build")]
-        public void Build()
+        void Build()
         {
+            EditorCoroutineUtility.StartCoroutineOwnerless(BuildCoroutine());
+        }
+
+        IEnumerator BuildCoroutine()
+        {
+            var config = BuildConfig.Get();
+            Version = BuildVersion.Get();
+            BuildPath = Path.Combine(config.BuildPath, Version, string.Format(Path.Combine(BuildName), Version));
+
+            yield return BundleVersionCodeRequest.CallCoroutine(this, config.VersionPass);
+
             BuildMaker.Build(this);
         }
     }

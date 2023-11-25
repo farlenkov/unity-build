@@ -1,8 +1,10 @@
 #if UNITY_EDITOR
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using UnityEngine;
 
 namespace UnityBuild
@@ -12,6 +14,7 @@ namespace UnityBuild
         public static void Build()
         {
             var args = BuildArgs.Read();
+            Build(args);
         }
 
         public static void Build(BuildArgs args)

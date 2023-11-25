@@ -2,7 +2,8 @@
     "name": "UnityBuild.Editor",
     "rootNamespace": "UnityBuild",
     "references": [
-        "GUID:b21f4b1d6baf90041aa6a65bca236026"
+        "GUID:b21f4b1d6baf90041aa6a65bca236026",
+        "GUID:478a2357cc57436488a56e564b08d223"
     ],
     "includePlatforms": [
         "Editor"

@@ -4,9 +4,13 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
+using Unity.EditorCoroutines.Editor;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Networking;
 using UnityEngine.Rendering;
+using UnityUtility;
 
 namespace UnityBuild
 {
@@ -31,17 +35,17 @@ namespace UnityBuild
 
         [field: SerializeField] public GraphicsDeviceType[] GraphicsDeviceTypes { get; private set; }
 
-        public virtual void Build(BuildArgs args)
+        public void Build(BuildArgs args)
         {
             // LOAD CONFIGS
 
             var defaultVersion = PlayerSettings.bundleVersion;
-            var buildPath = args.BuildPath;
-            var version = BuildVersion.Get();
+            var buildPath = string.Format(args.BuildPath, args.Version);
+            Log.Info($"[BuildSettings: Build] '{name}', '{args.BundleName}', '{args.Product}', '{args.Version}', '{buildPath}'");
 
             // SETTINGS
 
-            PlayerSettings.bundleVersion = version;
+            PlayerSettings.bundleVersion = args.Version;
             PlayerSettings.productName = args.Product;
             PlayerSettings.SetApplicationIdentifier(BuildTargetGroup, args.BundleName);
             // PlayerSettings.SetIl2CppCodeGeneration(settings.NamedBuildTarget, UnityEditor.Build.Il2CppCodeGeneration.OptimizeSize);
@@ -53,7 +57,10 @@ namespace UnityBuild
 
             EditorUserBuildSettings.buildAppBundle = BuildAppBundle;
             PlayerSettings.Android.useAPKExpansionFiles = UseAPKExpansionFiles;
-            PlayerSettings.Android.bundleVersionCode = args.BundleCode;
+            PlayerSettings.Android.bundleVersionCode = args.VersionCode;
+
+            // yield return BundleVersionCodeRequest.CallCoroutine(args.BundleName, version, args.VersionPass);
+            // PlayerSettings.Android.bundleVersionCode = BundleVersionCodeRequest.Call(args.BundleName, version, args.VersionPass); //  args.BundleCode;
 
             // if (!config.AndroidKeyStoreName.IsNullOrEmpty())
             // {
@@ -68,6 +75,7 @@ namespace UnityBuild
             var options = new BuildPlayerOptions()
             {
                 // scenes = BuildScenes.GetPaths(),
+                scenes = GetScenePaths(EditorBuildSettings.scenes),
                 locationPathName = buildPath,
                 target = BuildTarget,
                 targetGroup = BuildTargetGroup,
@@ -97,7 +105,7 @@ namespace UnityBuild
             // LOG
 
             var str = new StringBuilder();
-            str.AppendFormat("Build Result: {0} - {1}\n", report.summary.result, version);
+            str.AppendFormat("Build Result: {0} - {1}\n", report.summary.result, args.Version);
 
             foreach (var step in report.steps)
                 str.AppendFormat("Build Step: {0}s - {1}\n", step.duration.TotalSeconds, step.name);
@@ -105,6 +113,17 @@ namespace UnityBuild
             Debug.Log(str.ToString());
             PlayerSettings.bundleVersion = defaultVersion;
         }
+
+        private string[] GetScenePaths(EditorBuildSettingsScene[] scenes)
+        {
+            var paths = new string[scenes.Length];
+
+            for (var i = 0; i < scenes.Length; i++)
+                paths[i] = scenes[i].path;
+
+            return paths;
+        }
+
     }
 }
 
