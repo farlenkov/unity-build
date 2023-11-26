@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityUtility;
 
 namespace UnityBuild
 {
@@ -14,15 +15,20 @@ namespace UnityBuild
         public static void Build()
         {
             var args = BuildArgs.Read();
-            Build(args);
+            var config = BuildConfig.Get();
+            Build(args, config);
         }
 
-        public static void Build(BuildArgs args)
+        public static void Build(BuildArgs args, BuildConfig config)
         {
             var settingsName = string.IsNullOrEmpty(args.BuildType) ? "Default" : args.BuildType;
             var settingsAll = Resources.LoadAll<BuildSettings>(string.Empty);
             var settings = settingsAll.FirstOrDefault(settings => settings.name == settingsName);
-            settings.Build(args);
+
+            if (settings == null)
+                Log.Error($"[BuildMaker: Build] BuildSettings not found by name: '{settingsName}'");
+
+            settings.Build(args, config);
         }
     }
 }

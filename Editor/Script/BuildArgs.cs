@@ -69,7 +69,7 @@ namespace UnityBuild
             if (config.VersionPass != null)
                 yield return BundleVersionCodeRequest.CallCoroutine(this, config.VersionPass);
 
-            BuildMaker.Build(this);
+            BuildMaker.Build(this, config);
         }
     }
 }

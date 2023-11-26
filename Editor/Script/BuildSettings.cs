@@ -35,7 +35,7 @@ namespace UnityBuild
 
         [field: SerializeField] public GraphicsDeviceType[] GraphicsDeviceTypes { get; private set; }
 
-        public void Build(BuildArgs args)
+        public void Build(BuildArgs args, BuildConfig config)
         {
             // LOAD CONFIGS
 
@@ -62,14 +62,14 @@ namespace UnityBuild
             // yield return BundleVersionCodeRequest.CallCoroutine(args.BundleName, version, args.VersionPass);
             // PlayerSettings.Android.bundleVersionCode = BundleVersionCodeRequest.Call(args.BundleName, version, args.VersionPass); //  args.BundleCode;
 
-            // if (!config.AndroidKeyStoreName.IsNullOrEmpty())
-            // {
-            //     PlayerSettings.Android.useCustomKeystore = true;
-            //     PlayerSettings.Android.keystoreName = config.AndroidKeyStoreName;
-            //     PlayerSettings.Android.keystorePass = config.AndroidKeyStorePass;
-            //     PlayerSettings.Android.keyaliasName = config.AndroidKeyAliasName;
-            //     PlayerSettings.Android.keyaliasPass = config.AndroidKeyAliasPass;
-            // }
+            if (!config.AndroidKeyStoreName.IsNullOrEmpty())
+            {
+                PlayerSettings.Android.useCustomKeystore = true;
+                PlayerSettings.Android.keystoreName = config.AndroidKeyStoreName;
+                PlayerSettings.Android.keystorePass = config.AndroidKeyStorePass;
+                PlayerSettings.Android.keyaliasName = config.AndroidKeyAliasName;
+                PlayerSettings.Android.keyaliasPass = config.AndroidKeyAliasPass;
+            }
 #endif
 
             var options = new BuildPlayerOptions()

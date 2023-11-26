@@ -19,6 +19,8 @@ namespace UnityBuild
                 args.Version,
                 pass);
 
+            Log.Info($"[BundleVersionCodeRequest] Request: '{url}");
+
             using (var req = UnityEngine.Networking.UnityWebRequest.Get(url))
             {
                 yield return req.SendWebRequest();
@@ -30,6 +32,7 @@ namespace UnityBuild
                 }
 
                 var json = req.downloadHandler.text;
+                Log.Info($"[BundleVersionCodeRequest] Response: '{json}");
                 var resp = UnityEngine.JsonUtility.FromJson<BundleVersionCodeResponse>(json);
 
                 if (resp.IsError)

@@ -14,6 +14,11 @@ namespace UnityBuild
         public string VersionPass;
         public List<string> Builders;
 
+        public string AndroidKeyStoreName;
+	    public string AndroidKeyStorePass;
+	    public string AndroidKeyAliasName;
+	    public string AndroidKeyAliasPass;
+
         public static BuildConfig Get()
         {
             FindFileInParent.Exec("BuildConfig.json", out var configPath);
