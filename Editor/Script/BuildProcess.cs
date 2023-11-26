@@ -2,12 +2,53 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Text;
+using UnityUtility;
 
 namespace UnityBuild
 {
     public static class BuildProcess
     {
+        public struct UnityArgs
+        {
+            public string FileName;
+            public string BuildName;
+            public string BuildType;
+            public string Project;
+            public string BundleName;
+            public string ProductName;
+            public string Version;
+            public int VersionCode;
+        }
+
+        public static string BuildUnity(
+            string rootPath,
+            BuildConfig config,
+            UnityArgs args)
+        {
+            var buildType = args.BuildType ?? "Default";
+            var projectPath = $"./{args.Project}";
+            var outPath = Path.Combine(rootPath, args.BuildName);
+            var logPath = Path.Combine(rootPath, args.BuildName + "-log.txt");
+            var filePath = Path.Combine(rootPath, args.FileName);
+            var baseArgs = "-batchmode -nographics -quit -executeMethod UnityBuild.BuildMaker.Build";
+            var cmd = $"{baseArgs} -projectPath \"{projectPath}\" -buildpath \"{filePath}\" -buildtype \"{buildType}\" -logFile \"{logPath}\" -bundle \"{args.BundleName}\" -product \"{args.ProductName}\" -ver \"{args.Version}\"";
+
+            if (args.VersionCode > 0)
+                cmd += $" -code {args.VersionCode}";
+
+            Log.Info($"[BuildUnity] {config.UnityPath} {cmd}");
+
+            //var exitCode = Run(config.UnityPath, cmd, null, log => Console.WriteLine(log));
+            var exitCode = Run(config.UnityPath, cmd);
+            Log.Info($"[BuildUnity] ExitCode: {exitCode}");
+
+            // DELETE DEBUG FOLDER
+
+            return outPath;
+        }
+
         public static int Run(
             string application,
             string arguments = null,

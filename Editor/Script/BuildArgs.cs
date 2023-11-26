@@ -5,6 +5,7 @@ using System.Collections;
 using System.IO;
 using Unity.EditorCoroutines.Editor;
 using UnityEngine;
+using UnityUtility;
 
 namespace UnityBuild
 {
@@ -63,7 +64,10 @@ namespace UnityBuild
             Version = BuildVersion.Get();
             BuildPath = Path.Combine(config.BuildPath, Version, string.Format(Path.Combine(BuildName), Version));
 
-            yield return BundleVersionCodeRequest.CallCoroutine(this, config.VersionPass);
+            Log.Info($"[BuildArgs: Build] {BuildPath}");
+
+            if (config.VersionPass != null)
+                yield return BundleVersionCodeRequest.CallCoroutine(this, config.VersionPass);
 
             BuildMaker.Build(this);
         }
