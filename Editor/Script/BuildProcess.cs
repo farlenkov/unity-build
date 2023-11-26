@@ -31,7 +31,7 @@ namespace UnityBuild
             var projectPath = $"./{args.Project}";
             var outPath = Path.Combine(rootPath, args.BuildName);
             var logPath = Path.Combine(rootPath, args.BuildName + "-log.txt");
-            var filePath = Path.Combine(rootPath, args.FileName);
+            var filePath = args.FileName == null ? outPath : Path.Combine(outPath, args.FileName);
             var baseArgs = "-batchmode -nographics -quit -executeMethod UnityBuild.BuildMaker.Build";
             var cmd = $"{baseArgs} -projectPath \"{projectPath}\" -buildpath \"{filePath}\" -buildtype \"{buildType}\" -logFile \"{logPath}\" -bundle \"{args.BundleName}\" -product \"{args.ProductName}\" -ver \"{args.Version}\"";
 
