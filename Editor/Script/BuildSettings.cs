@@ -1,14 +1,8 @@
 #if UNITY_EDITOR
 
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Text;
-using System.Threading.Tasks;
-using Unity.EditorCoroutines.Editor;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.Networking;
 using UnityEngine.Rendering;
 using UnityUtility;
 
@@ -52,6 +46,12 @@ namespace UnityBuild
 
             EditorUserBuildSettings.standaloneBuildSubtarget = StandaloneBuildSubtarget;
             EditorUserBuildSettings.SwitchActiveBuildTarget(BuildTargetGroup, BuildTarget);
+
+            if (BuildInfo.TryLoad(out var buildInfo))
+            {
+                buildInfo.BundleName = args.BundleName;
+                buildInfo.Version = args.Version;
+            }
 
 #if UNITY_ANDROID
 
@@ -98,9 +98,12 @@ namespace UnityBuild
                 PlayerSettings.SetUseDefaultGraphicsAPIs(BuildTarget, true);
             }
 
+
             // BUILD
 
+            PreBuild();
             var report = BuildPipeline.BuildPlayer(options);
+            PostBuild();
 
             // LOG
 
@@ -112,6 +115,16 @@ namespace UnityBuild
 
             Debug.Log(str.ToString());
             PlayerSettings.bundleVersion = defaultVersion;
+        }
+
+        protected virtual void PreBuild()
+        {
+
+        }
+
+        protected virtual void PostBuild()
+        {
+
         }
 
         private string[] GetScenePaths(EditorBuildSettingsScene[] scenes)
