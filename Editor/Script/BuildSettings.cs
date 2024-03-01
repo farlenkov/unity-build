@@ -122,7 +122,7 @@ namespace UnityBuild
             Debug.Log(str.ToString());
             PlayerSettings.bundleVersion = defaultVersion;
 
-            if (buildInfo != null)
+            if (BuildInfo.TryLoad(out buildInfo))
             {
                 buildInfo.BundleName = tempBuildInfo.BundleName;
                 buildInfo.Version = tempBuildInfo.Version;
