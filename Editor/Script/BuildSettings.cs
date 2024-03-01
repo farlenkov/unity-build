@@ -33,6 +33,7 @@ namespace UnityBuild
         {
             // LOAD CONFIGS
 
+            var tempBuildInfo = ScriptableObject.CreateInstance<BuildInfo>();
             var defaultVersion = PlayerSettings.bundleVersion;
             var buildPath = string.Format(args.BuildPath, args.Version);
             Log.Info($"[BuildSettings: Build] '{name}', '{args.BundleName}', '{args.Product}', '{args.Version}', '{buildPath}'");
@@ -49,8 +50,14 @@ namespace UnityBuild
 
             if (BuildInfo.TryLoad(out var buildInfo))
             {
+                tempBuildInfo.BundleName = buildInfo.BundleName;
+                tempBuildInfo.Version = buildInfo.Version;
+
                 buildInfo.BundleName = args.BundleName;
                 buildInfo.Version = args.Version;
+
+                EditorUtility.SetDirty(buildInfo);
+                AssetDatabase.SaveAssets();
             }
 
 #if UNITY_ANDROID
@@ -98,7 +105,6 @@ namespace UnityBuild
                 PlayerSettings.SetUseDefaultGraphicsAPIs(BuildTarget, true);
             }
 
-
             // BUILD
 
             PreBuild();
@@ -115,6 +121,15 @@ namespace UnityBuild
 
             Debug.Log(str.ToString());
             PlayerSettings.bundleVersion = defaultVersion;
+
+            if (buildInfo != null)
+            {
+                buildInfo.BundleName = tempBuildInfo.BundleName;
+                buildInfo.Version = tempBuildInfo.Version;
+
+                EditorUtility.SetDirty(buildInfo);
+                AssetDatabase.SaveAssets();
+            }
         }
 
         protected virtual void PreBuild()
