@@ -107,7 +107,7 @@ namespace UnityBuild
 
             // BUILD
 
-            PreBuild();
+            PreBuild(options);
             var report = BuildPipeline.BuildPlayer(options);
             PostBuild();
 
@@ -132,7 +132,7 @@ namespace UnityBuild
             }
         }
 
-        protected virtual void PreBuild()
+        protected virtual void PreBuild(BuildPlayerOptions options)
         {
 
         }
