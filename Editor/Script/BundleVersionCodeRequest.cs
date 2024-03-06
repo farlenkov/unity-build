@@ -61,12 +61,16 @@ namespace UnityBuild
                 version,
                 pass);
 
+            Log.Info($"[BundleVersionCodeRequest] GET: {url}");
+
             try
             {
                 var client = new System.Net.Http.HttpClient();
                 var httpResp = await client.GetAsync(url);
                 var json = await httpResp.Content.ReadAsStringAsync();
                 client.Dispose();
+
+                //var json = WebRequest.Get(url);
 
                 if (!httpResp.IsSuccessStatusCode)
                 {

@@ -6,6 +6,7 @@ namespace UnityBuild
     public class BuildInfo : ScriptableObject
     {
         public string BundleName;
+        public string ConfigName;
         public string Version;
 
 #if UNITY_2017_1_OR_NEWER

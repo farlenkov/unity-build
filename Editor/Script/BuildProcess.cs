@@ -15,11 +15,12 @@ namespace UnityBuild
             public string BuildType;
             public string Project;
             public string BundleName;
+            public string ConfigName;
             public string ProductName;
             public string Version;
             public int VersionCode;
         }
-
+            
         public static string BuildUnity(
             string rootPath,
             BuildConfig config,
@@ -31,7 +32,7 @@ namespace UnityBuild
             var logPath = Path.Combine(rootPath, args.BuildName + "-log.txt");
             var filePath = args.FileName == null ? outPath : Path.Combine(outPath, args.FileName);
             var baseArgs = "-batchmode -nographics -quit -executeMethod UnityBuild.BuildMaker.Build";
-            var cmd = $"{baseArgs} -projectPath \"{projectPath}\" -buildpath \"{filePath}\" -buildtype \"{buildType}\" -logFile \"{logPath}\" -bundle \"{args.BundleName}\" -product \"{args.ProductName}\" -ver \"{args.Version}\"";
+            var cmd = $"{baseArgs} -projectPath \"{projectPath}\" -buildpath \"{filePath}\" -buildtype \"{buildType}\" -logFile \"{logPath}\" -bundle \"{args.BundleName}\" -config \"{args.ConfigName}\" -product \"{args.ProductName}\" -ver \"{args.Version}\"";
 
             if (args.VersionCode > 0)
                 cmd += $" -code {args.VersionCode}";

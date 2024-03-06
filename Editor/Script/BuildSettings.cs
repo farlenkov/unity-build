@@ -51,9 +51,11 @@ namespace UnityBuild
             if (BuildInfo.TryLoad(out var buildInfo))
             {
                 tempBuildInfo.BundleName = buildInfo.BundleName;
+                tempBuildInfo.ConfigName = buildInfo.ConfigName;
                 tempBuildInfo.Version = buildInfo.Version;
 
                 buildInfo.BundleName = args.BundleName;
+                buildInfo.ConfigName = args.ConfigName;
                 buildInfo.Version = args.Version;
 
                 EditorUtility.SetDirty(buildInfo);
@@ -125,6 +127,7 @@ namespace UnityBuild
             if (BuildInfo.TryLoad(out buildInfo))
             {
                 buildInfo.BundleName = tempBuildInfo.BundleName;
+                buildInfo.ConfigName = tempBuildInfo.ConfigName;
                 buildInfo.Version = tempBuildInfo.Version;
 
                 EditorUtility.SetDirty(buildInfo);

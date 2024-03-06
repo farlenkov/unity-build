@@ -15,6 +15,7 @@ namespace UnityBuild
         public string[] BuildName;
         public string BuildType = "Default"; // -buildtype
         public string BundleName = "com.company.product"; // -bundle
+        public string ConfigName = "com.company.product.config"; // -config
         public string Product = "MyGame"; // -product
 
         [NonSerialized] public int VersionCode; // -code
@@ -35,6 +36,7 @@ namespace UnityBuild
                     case "-buildpath": result.BuildPath = args[i + 1]; break;
                     case "-buildtype": result.BuildType = args[i + 1]; break;
                     case "-bundle": result.BundleName = args[i + 1]; break;
+                    case "-config": result.ConfigName = args[i + 1]; break;
                     case "-ver": result.Version = args[i + 1]; break;
                     case "-code": result.VersionCode = Parse(args[i + 1]); break;
                     case "-product": result.Product = args[i + 1]; break;
