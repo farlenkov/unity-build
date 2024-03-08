@@ -41,7 +41,7 @@ namespace UnityBuild
 
             //var exitCode = Run(config.UnityPath, cmd, null, log => Console.WriteLine(log));
             var exitCode = Run(config.UnityPath, cmd);
-            Log.Info($"[BuildUnity] ExitCode: {exitCode}");
+            Log.Info($"[BuildUnity] ExitCode: {exitCode} ({args.BundleName})");
 
             // DELETE DEBUG FOLDER
 
