@@ -61,7 +61,7 @@ namespace UnityBuild
                 version,
                 pass);
 
-            Log.Info($"[BundleVersionCodeRequest] GET: {url}");
+            Log.Info($"\n[BundleVersionCodeRequest] GET: {url}");
 
             try
             {
