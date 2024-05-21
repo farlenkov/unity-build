@@ -22,14 +22,15 @@ namespace UnityBuild
         }
             
         public static string BuildUnity(
-            string rootPath,
+            string outPath,
+            string logPath,
             BuildConfig config,
             UnityArgs args)
         {
             var buildType = args.BuildType ?? "Default";
             var projectPath = $"./{args.Project}";
-            var outPath = Path.Combine(rootPath, args.BuildName);
-            var logPath = Path.Combine(rootPath, args.BuildName + "-log.txt");
+            //var outPath = Path.Combine(rootPath, args.BuildName);
+            //var logPath = Path.Combine(rootPath, args.BuildName + "-log.txt");
             var filePath = args.FileName == null ? outPath : Path.Combine(outPath, args.FileName);
             var baseArgs = "-batchmode -nographics -quit -executeMethod UnityBuild.BuildMaker.Build";
             var cmd = $"{baseArgs} -projectPath \"{projectPath}\" -buildpath \"{filePath}\" -buildtype \"{buildType}\" -logFile \"{logPath}\" -bundle \"{args.BundleName}\" -config \"{args.ConfigName}\" -product \"{args.ProductName}\" -ver \"{args.Version}\"";
@@ -38,6 +39,16 @@ namespace UnityBuild
                 cmd += $" -code {args.VersionCode}";
 
             Log.Info($"\n[BuildUnity] {config.UnityPath} {cmd}");
+
+            if (args.FileName == null)
+            {
+                if (Directory.Exists(outPath))
+                    Directory.Delete(outPath, true);
+            }
+            else
+            {
+                File.Delete(filePath);
+            }
 
             //var exitCode = Run(config.UnityPath, cmd, null, log => Console.WriteLine(log));
             var exitCode = Run(config.UnityPath, cmd);
