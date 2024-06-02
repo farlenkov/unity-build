@@ -31,10 +31,15 @@ namespace UnityBuild
 
         public void Build(BuildArgs args, BuildConfig config)
         {
+            // CACHE PROJECT SETTINGS
+
+            var defaultVersion = PlayerSettings.bundleVersion;
+            var defaultProduct = PlayerSettings.productName;
+            var defaultIdentifier = PlayerSettings.GetApplicationIdentifier(BuildTargetGroup);
+
             // LOAD CONFIGS
 
             var tempBuildInfo = ScriptableObject.CreateInstance<BuildInfo>();
-            var defaultVersion = PlayerSettings.bundleVersion;
             var buildPath = string.Format(args.BuildPath, args.Version);
             Log.Info($"[BuildSettings: Build] '{name}', '{args.BundleName}', '{args.Product}', '{args.Version}', '{buildPath}'");
 
@@ -122,7 +127,14 @@ namespace UnityBuild
                 str.AppendFormat("Build Step: {0}s - {1}\n", step.duration.TotalSeconds, step.name);
 
             Debug.Log(str.ToString());
+
+            // RESTORE PROJECT SETTINGS
+
             PlayerSettings.bundleVersion = defaultVersion;
+            PlayerSettings.productName = defaultProduct;
+            PlayerSettings.SetApplicationIdentifier(BuildTargetGroup, defaultIdentifier);
+
+            // UPDATE BuildInfo
 
             if (BuildInfo.TryLoad(out buildInfo))
             {
