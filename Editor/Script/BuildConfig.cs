@@ -21,9 +21,14 @@ namespace UnityBuild
 
         public static BuildConfig Get()
         {
+            return Get<BuildConfig>();
+        }
+        
+        public static T Get<T>()
+        {
             FindFileInParent.Exec("BuildConfig.json", out var configPath);
             var configJson = File.ReadAllText(configPath);
-            var config = JsonConvert.DeserializeObject<BuildConfig>(configJson);
+            var config = JsonConvert.DeserializeObject<T>(configJson);
             return config;
         }
     }

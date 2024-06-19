@@ -69,7 +69,7 @@ namespace UnityBuild
                 process.StartInfo = new ProcessStartInfo
                 {
                     CreateNoWindow = true,
-                    UseShellExecute = false,
+                    UseShellExecute = true,
                     RedirectStandardError = false,
                     RedirectStandardOutput = false,
                     FileName = application,
