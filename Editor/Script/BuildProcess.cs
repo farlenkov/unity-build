@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
+using System.Threading.Tasks;
 using UnityUtility;
 
 namespace UnityBuild
@@ -79,6 +80,32 @@ namespace UnityBuild
 
                 process.Start();
                 process.WaitForExit();
+
+                return process.ExitCode;
+            }
+        }
+
+        public static async Task<int> RunAsync(
+            string application,
+            string arguments = null,
+            string workingDirectory = null)
+        {
+            using (var process = new Process())
+            {
+                process.StartInfo = new ProcessStartInfo
+                {
+                    CreateNoWindow = true,
+                    UseShellExecute = true,
+                    RedirectStandardError = false,
+                    RedirectStandardOutput = false,
+                    FileName = application,
+                    Arguments = arguments,
+                    WorkingDirectory = workingDirectory,
+                    WindowStyle = ProcessWindowStyle.Hidden
+                };
+
+                process.Start();
+                await process.WaitForExitAsync();
 
                 return process.ExitCode;
             }
