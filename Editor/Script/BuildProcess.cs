@@ -133,8 +133,12 @@ namespace UnityBuild
 
                 var outputBuilder = new StringBuilder();
                 var errorsBuilder = new StringBuilder();
-                process.OutputDataReceived += (_, args) => outputBuilder.AppendLine(args.Data);
-                process.ErrorDataReceived += (_, args) => errorsBuilder.AppendLine(args.Data);
+
+                process.OutputDataReceived += (_, args) => 
+                    outputBuilder.AppendLine(args.Data);
+
+                process.ErrorDataReceived += (_, args) => 
+                    errorsBuilder.AppendLine(args.Data);
 
                 process.Start();
                 process.BeginOutputReadLine();
